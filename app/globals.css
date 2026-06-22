@@ -101,3 +101,95 @@ body {
 .phishing-highlight-target.reveal-missed {
   border-bottom: 2px dotted #ea580c;
 }
+
+/* Cyber security animations */
+@keyframes cyber-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes cyber-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+@keyframes cyber-glow {
+  0%, 100% { box-shadow: 0 0 0px rgba(5, 125, 188, 0); }
+  50% { box-shadow: 0 0 20px rgba(5, 125, 188, 0.25); }
+}
+
+@keyframes cyber-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes cyber-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes cyber-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cyber-typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes cyber-border-trace {
+  0% { background-position: 0% 0%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+.animate-cyber-float {
+  animation: cyber-float 3s ease-in-out infinite;
+}
+
+.animate-cyber-pulse {
+  animation: cyber-pulse 2s ease-in-out infinite;
+}
+
+.animate-cyber-glow {
+  animation: cyber-glow 2s ease-in-out infinite;
+}
+
+.animate-cyber-blink {
+  animation: cyber-blink 1s step-end infinite;
+}
+
+.animate-cyber-slide-up {
+  animation: cyber-slide-up 0.6s ease-out forwards;
+}
+
+/* Staggered animation delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* Cyber sticker hover effects */
+.cyber-sticker-hover {
+  transition: all 0.3s ease;
+}
+.cyber-sticker-hover:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 0 15px rgba(5, 125, 188, 0.2);
+}
+
+/* Terminal cursor blink */
+.cursor-blink::after {
+  content: '█';
+  animation: cyber-blink 1s step-end infinite;
+}
+
+/* Security badge glow on hover */
+.badge-glow:hover {
+  box-shadow: 0 0 12px rgba(5, 125, 188, 0.3);
+  border-color: var(--color-link);
+}

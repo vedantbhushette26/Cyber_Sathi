@@ -1,16 +1,24 @@
 import Link from 'next/link';
 import { getSessionUser } from '@/lib/auth';
+import {
+  FeatureStickers,
+  ThreatBanner,
+  SecurityFooter,
+} from '@/components/CyberAnimations';
 
 export default async function Home() {
   const user = await getSessionUser();
 
   return (
     <div className="flex-1 bg-canvas flex flex-col">
+      {/* Threat Level Banner */}
+      <ThreatBanner />
+
       {/* Editorial Hero Block */}
-      <section className="border-b border-hairline py-16 px-6">
+      <section className="border-b border-hairline py-16 px-6 relative">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Cover Story (Col Span 2) */}
-          <div className="lg:col-span-2 flex flex-col justify-between border-r border-hairline pr-0 lg:pr-12">
+          <div className="lg:col-span-2 flex flex-col justify-between border-r border-hairline pr-0 lg:pr-12 relative">
             <div>
               <span className="text-xs uppercase font-extrabold tracking-widest text-link font-sans mb-3 block">
                 Threat Vectors // Edition 2026
@@ -91,10 +99,15 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Animated Security Stickers */}
+      <section className="py-12 px-6 border-b border-hairline">
+        <FeatureStickers />
+      </section>
+
       {/* Feature Row Grid (3 Column) */}
       <section className="py-16 px-6 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="border border-hairline p-6 bg-canvas-soft flex flex-col justify-between">
+          <div className="border border-hairline p-6 bg-canvas-soft flex flex-col justify-between cyber-sticker-hover">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-widest text-ink block mb-2">01 // Identify</span>
               <h4 className="font-display text-xl font-normal mb-3">Spoofed Domains & Urgency</h4>
@@ -102,12 +115,13 @@ export default async function Home() {
                 Learn to check behind the anchor texts. Detect lookalike domain extensions and stressful commands urging actions.
               </p>
             </div>
-            <div className="border-t border-hairline pt-4 text-xs font-bold uppercase">
-              Email Scenarios
+            <div className="border-t border-hairline pt-4 text-xs font-bold uppercase flex items-center justify-between">
+              <span>Email Scenarios</span>
+              <span className="text-link animate-cyber-pulse">●</span>
             </div>
           </div>
 
-          <div className="border border-hairline p-6 bg-canvas-soft flex flex-col justify-between">
+          <div className="border border-hairline p-6 bg-canvas-soft flex flex-col justify-between cyber-sticker-hover">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-widest text-ink block mb-2">02 // Inspect</span>
               <h4 className="font-display text-xl font-normal mb-3">Cloned Web Interfaces</h4>
@@ -115,12 +129,13 @@ export default async function Home() {
                 Observe URL structures and secure sockets. Spot misaligned frames and unusual authentication prompts.
               </p>
             </div>
-            <div className="border-t border-hairline pt-4 text-xs font-bold uppercase">
-              Webpage Portals
+            <div className="border-t border-hairline pt-4 text-xs font-bold uppercase flex items-center justify-between">
+              <span>Webpage Portals</span>
+              <span className="text-link animate-cyber-pulse">●</span>
             </div>
           </div>
 
-          <div className="border border-hairline p-6 bg-canvas-soft flex flex-col justify-between">
+          <div className="border border-hairline p-6 bg-canvas-soft flex flex-col justify-between cyber-sticker-hover">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-widest text-ink block mb-2">03 // Rectify</span>
               <h4 className="font-display text-xl font-normal mb-3">Detailed Explanations</h4>
@@ -128,12 +143,16 @@ export default async function Home() {
                 Get immediate breakdowns on every mistake. Build your personalized profile outlining exact vulnerabilities.
               </p>
             </div>
-            <div className="border-t border-hairline pt-4 text-xs font-bold uppercase">
-              Personal Feedback
+            <div className="border-t border-hairline pt-4 text-xs font-bold uppercase flex items-center justify-between">
+              <span>Personal Feedback</span>
+              <span className="text-link animate-cyber-pulse">●</span>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Security Trust Footer */}
+      <SecurityFooter />
     </div>
   );
 }

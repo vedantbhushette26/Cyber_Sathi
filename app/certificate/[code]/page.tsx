@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
-import { Award, Shield, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Award, Shield, ArrowLeft, CheckCircle2, ShieldCheck, Lock, Fingerprint } from 'lucide-react';
 import PrintButton from '@/components/PrintButton';
+import CertificateAnimations from '@/components/CertificateAnimations';
 
 interface PageProps {
   params: Promise<{ code: string }>;
@@ -119,7 +120,7 @@ export default async function CertificatePage({ params }: PageProps) {
             background: white !important;
             color: black !important;
           }
-          header, footer, #suggestions-panel, #navigation-back {
+          header, footer, #suggestions-panel, #navigation-back, #certificate-stickers {
             display: none !important;
           }
           #certificate-print-card {
@@ -149,6 +150,26 @@ export default async function CertificatePage({ params }: PageProps) {
           <span className="text-xs font-mono text-body">Verified Code: {code}</span>
         </div>
 
+        {/* Security Stickers Row */}
+        <div id="certificate-stickers" className="flex justify-center gap-6">
+          {[
+            { icon: ShieldCheck, label: 'VERIFIED' },
+            { icon: Lock, label: 'SECURED' },
+            { icon: Fingerprint, label: 'AUTHENTIC' },
+          ].map(({ icon: Icon, label }) => (
+            <div
+              key={label}
+              className="flex items-center gap-2 border border-hairline bg-canvas px-3 py-1.5 animate-cyber-float"
+              style={{ animationDelay: `${['VERIFIED', 'SECURED', 'AUTHENTIC'].indexOf(label) * 200}ms` }}
+            >
+              <Icon size={12} className="text-link" strokeWidth={1.5} />
+              <span className="text-[9px] font-sans font-bold tracking-widest text-body uppercase">
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+
         {/* Certificate Card Container */}
         <div
           id="certificate-print-card"
@@ -170,7 +191,11 @@ export default async function CertificatePage({ params }: PageProps) {
             </div>
           </div>
 
-          <Award className="w-16 h-16 text-ink mb-6" />
+          {/* Animated Award Icon */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 border-2 border-link/20 rounded-full animate-ping"></div>
+            <Award className="w-16 h-16 text-ink relative z-10" />
+          </div>
 
           {/* Certificate Main Text */}
           <div className="space-y-4 max-w-2xl">
@@ -193,10 +218,11 @@ export default async function CertificatePage({ params }: PageProps) {
 
           {/* Signature and Seal Blocks */}
           <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-8 border-t border-hairline pt-8 mt-12">
-            {/* Seal */}
+            {/* Animated Seal */}
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 border-2 border-ink flex items-center justify-center font-display text-xs font-extrabold uppercase p-1">
-                <div className="border border-ink border-dashed w-full h-full flex flex-col items-center justify-center p-0.5">
+              <div className="w-16 h-16 border-2 border-ink flex items-center justify-center font-display text-xs font-extrabold uppercase p-1 relative">
+                <div className="absolute inset-0 border border-dashed border-link/30 animate-spin-slow"></div>
+                <div className="border border-ink border-dashed w-full h-full flex flex-col items-center justify-center p-0.5 relative z-10 bg-canvas">
                   <span className="text-[8px] tracking-tighter">SECURED</span>
                   <span className="text-[9px] font-bold">PORTAL</span>
                   <span className="text-[7px]">VERIFIED</span>
@@ -249,7 +275,7 @@ export default async function CertificatePage({ params }: PageProps) {
 
           <div className="space-y-6 font-sans">
             {suggestions.map((s, idx) => (
-              <div key={idx} className="border border-hairline p-4 bg-canvas-soft">
+              <div key={idx} className="border border-hairline p-4 bg-canvas-soft cyber-sticker-hover">
                 <h4 className="font-bold text-xs uppercase tracking-wider text-ink mb-1.5 flex items-center gap-2">
                   <Shield className="w-4 h-4 text-link" /> {s.title}
                 </h4>

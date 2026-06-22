@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, ShieldCheck, ArrowRight, Check, X, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, ShieldCheck, ArrowRight, Check, X, ShieldAlert, Shield, Lock, Radar } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface SuspiciousElement {
   id: string;
@@ -251,16 +252,45 @@ export default function TrainingClient() {
       
       {/* Session Progress Header */}
       <div className="border-b border-hairline py-4 px-6 bg-canvas-soft flex items-center justify-between text-xs font-bold font-sans uppercase">
-        <div className="flex items-center gap-2">
-          <span className="bg-ink text-canvas px-2 py-0.5 font-mono">
+        <div className="flex items-center gap-3">
+          <motion.span
+            className="bg-ink text-canvas px-2 py-0.5 font-mono"
+            key={currentIndex}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
             {currentIndex + 1} / {scenarios.length}
-          </span>
+          </motion.span>
           <span>Threat Evaluation Session</span>
+          <div className="hidden md:flex items-center gap-2 ml-2">
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <Radar size={12} className="text-link" />
+            </motion.div>
+            <span className="text-[9px] text-link tracking-widest">SCANNING</span>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <span>Difficulty: <span className="font-mono text-link">{scenario.difficulty}</span></span>
           <span>Vector: <span className="font-mono text-link">{scenario.type}</span></span>
+          <div className="hidden md:flex items-center gap-1.5 border border-hairline px-2 py-0.5">
+            <Lock size={10} className="text-link" />
+            <span className="text-[9px] tracking-widest text-body">SECURE</span>
+          </div>
         </div>
+      </div>
+
+      {/* Animated progress bar */}
+      <div className="h-0.5 bg-canvas-soft w-full">
+        <motion.div
+          className="h-full bg-link"
+          initial={{ width: 0 }}
+          animate={{ width: `${((currentIndex + 1) / scenarios.length) * 100}%` }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        />
       </div>
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 max-w-7xl mx-auto w-full">

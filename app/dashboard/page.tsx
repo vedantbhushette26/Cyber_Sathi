@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import { getSessionUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import { StatsCards, DashboardHeader } from '@/components/DashboardAnimations';
+import { Award } from 'lucide-react';
 
 export default async function Dashboard() {
   const user = await getSessionUser();
@@ -29,61 +31,14 @@ export default async function Dashboard() {
       <div className="max-w-7xl mx-auto">
         
         {/* Header Block */}
-        <div className="border-b-2 border-ink pb-6 mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <div>
-            <span className="text-xs uppercase font-extrabold tracking-widest text-link font-sans block mb-1">
-              Defender Command // Overview
-            </span>
-            <h1 className="font-display text-4xl font-light uppercase tracking-tight text-ink">
-              Training Dashboard
-            </h1>
-          </div>
-          <Link
-            href="/training"
-            className="bg-ink text-canvas hover:bg-canvas hover:text-ink border border-ink px-8 py-3 text-xs font-bold uppercase tracking-wider transition-colors duration-200 text-center"
-          >
-            Start New training Session
-          </Link>
-        </div>
+        <DashboardHeader />
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          <div className="border border-hairline p-8 flex flex-col justify-between">
-            <span className="text-xs uppercase font-bold tracking-wider text-body font-sans">
-              Phishing Detection Index
-            </span>
-            <div className="my-6">
-              <span className="font-display text-5xl md:text-6xl font-light">{averageAccuracy}%</span>
-            </div>
-            <p className="text-xs text-body font-sans leading-relaxed">
-              Your overall detection accuracy across all evaluated communication elements.
-            </p>
-          </div>
-
-          <div className="border border-hairline p-8 flex flex-col justify-between">
-            <span className="text-xs uppercase font-bold tracking-wider text-body font-sans">
-              Completed Trials
-            </span>
-            <div className="my-6">
-              <span className="font-display text-5xl md:text-6xl font-light">{totalSessions}</span>
-            </div>
-            <p className="text-xs text-body font-sans leading-relaxed">
-              Total simulation runs completed (3-4 phishing/legitimate scenarios per run).
-            </p>
-          </div>
-
-          <div className="border border-hairline p-8 flex flex-col justify-between">
-            <span className="text-xs uppercase font-bold tracking-wider text-body font-sans">
-              Threats Evaluated
-            </span>
-            <div className="my-6">
-              <span className="font-display text-5xl md:text-6xl font-light">{totalScenarios}</span>
-            </div>
-            <p className="text-xs text-body font-sans leading-relaxed">
-              Total number of communication headers, links, and forms checked.
-            </p>
-          </div>
-        </div>
+        <StatsCards
+          accuracy={averageAccuracy}
+          sessions={totalSessions}
+          scenarios={totalScenarios}
+        />
 
         {/* History & Certificates split */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -127,14 +82,17 @@ export default async function Dashboard() {
                             {session.score} / {session.totalScenarios}
                           </td>
                           <td className="py-4 px-4 font-bold">
-                            {pct}%
+                            <span className={pct >= 70 ? 'text-green-600' : pct >= 40 ? 'text-yellow-600' : 'text-red-600'}>
+                              {pct}%
+                            </span>
                           </td>
                           <td className="py-4 pl-4 text-right">
                             {session.certificate ? (
                               <Link
                                 href={`/certificate/${session.certificate.certificateCode}`}
-                                className="text-link font-bold hover:underline group-hover:text-ink transition-colors"
+                                className="text-link font-bold hover:underline group-hover:text-ink transition-colors inline-flex items-center gap-1.5"
                               >
+                                <Award size={12} />
                                 {session.certificate.level} →
                               </Link>
                             ) : (
@@ -174,7 +132,8 @@ export default async function Dashboard() {
                           <span className="text-[10px] uppercase tracking-widest font-mono text-body">
                             ID: {session.certificate!.certificateCode}
                           </span>
-                          <span className="text-[10px] bg-ink text-canvas font-bold px-2 py-0.5 uppercase tracking-wide">
+                          <span className="text-[10px] bg-ink text-canvas font-bold px-2 py-0.5 uppercase tracking-wide flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
                             Active
                           </span>
                         </div>
