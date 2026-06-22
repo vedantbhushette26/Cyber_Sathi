@@ -1,0 +1,98 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum ScenarioType {
+  EMAIL
+  WEBPAGE
+  SMS
+  FAKE_AD
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  name         String?
+  passwordHash String?       // Nullable for OAuth-only users
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  sessions     Session[]
+  certificates Certificate[]
+}
+
+model Scenario {
+  id                 String             @id @default(uuid())
+  title              String
+  type               ScenarioType
+  difficulty         Difficulty
+  content            Json               // Contains structural data (sender, subject, body, URL, etc.)
+  explanation        String             @db.Text
+  isPhishing         Boolean
+  suspiciousElements Json               // Array of suspicious elements: { id, target, label, explanation }
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  feedbackEntries    Feedback[]
+}
+
+model Session {
+  id              String        @id @default(uuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score           Int           // Number of correct classifications
+  totalScenarios  Int           // Typically 3 or 4
+  scenarioIds     Json          // Array of scenario IDs presented in this session
+  createdAt       DateTime      @default(now())
+  feedback        Feedback[]
+  certificate     Certificate?
+}
+
+model Feedback {
+  id                 String   @id @default(uuid())
+  sessionId          String
+  session            Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  scenarioId         String
+  scenario           Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  userClassification Boolean  // True if user classified as phishing
+  isCorrect          Boolean  // True if user matched correct classification
+  flaggedElements    Json     // Array of element IDs the user flagged as suspicious
+  createdAt          DateTime @default(now())
+}
+
+model Certificate {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId       String   @unique
+  session         Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  level           String   // e.g. "Apprentice", "Defender", "Cyber Sentinel"
+  certificateCode String   @unique
+  issuedAt        DateTime @default(now())
+}
+
+model CyberIncident {
+  id          String   @id @default(uuid())
+  title       String
+  category    String   // e.g. "Domain Spoofing", "OTP Scam", "Phishing Email"
+  year        Int
+  description String   @db.Text
+  impact      String   @db.Text
+  prevention  String   @db.Text
+  createdAt   DateTime @default(now())
+}
